@@ -25,6 +25,28 @@ def load_occurrences_data(path_csv, reveals_targets=True):
     return df
 
 
+def process_output_logits(output, prediction_length=30):
+    """Processes output logits from a model.
+    Args:
+        output (tensor): output logits of shape (batch_size, num_classes),
+            containing predicted target probabilities.
+            Assumes that the last dimension is a probability distribution.
+        prediction_length (int): the length of the predicted ranking of classes.
+            Defaults to 30.
+    Returns:
+        tensor: the predicted class labels ordered, with shape (batch_size, prediction_length).
+        tensor: the predicted class labels probas, with same shape.
+    """
+    assert output.ndim() == 2, \
+        'Wrong number of dimensions for argument output: {}'.format(output.ndim())
+
+    sorted_indices = torch.argsort(output, dim=-1, descending=True)
+    output_labels = sorted_indices[:, :prediction_length]
+    output_probs = output[:, sorted_indices][:, :prediction_length]
+
+    return output_labels, output_probs
+
+
 if __name__ == '__main__':
     from constants import PATH_FR_TRAIN, PATH_FR_TEST
     train_df = load_occurrences_data(PATH_FR_TRAIN)

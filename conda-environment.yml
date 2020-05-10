@@ -46,5 +46,6 @@ dependencies:
   - notebook
   - seaborn
   - scikit-learn
+  - geopy
 prefix: /home/jules/miniconda3/envs/glc
 

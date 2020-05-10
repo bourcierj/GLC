@@ -1,5 +1,7 @@
 # Project-specific
 
+figs/
+figures/
 /rsync_exclude.txt
 TODO.md
 
